@@ -1,0 +1,19 @@
+extends template 
+
+block content
+  h1 New Faction
+  form(action="" method="POST")
+    div
+      label(for="factionName") Faction name:
+      input(type="text" id="factionName" name="factionName")
+    div
+      label(for="factionLeader") Faction leader:
+      input(type="text" id="factionLeader" name="factionLeader")
+    div
+        label(for="factionPower") Faction power:
+        input(type="number" id="factionPower" name="factionPower")
+    div 
+        label(for="factionDescription") Faction description:
+        input(type="text" id="factionDescription" name="factionDescription")
+    div
+      input(type="submit" value="Create Faction")

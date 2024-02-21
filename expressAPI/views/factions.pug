@@ -1,0 +1,25 @@
+extends template
+
+block content
+    .page-head Factions be here 
+    
+    table(style='width:100%',border ='1')
+        if !data.length
+            tr 
+                td No factions to display
+        else 
+            tr 
+                th Faction Name 
+                th Faction Leader
+                th Faction Power
+                th(colspan=2) Actions 
+            each faction in data
+                tr
+                    td=faction.factionName 
+                    td=faction.factionLeader 
+                    td=faction.factionPower
+                    td 
+                        //- TODO add link to edit faction function
+                        a(href="") Edit
+                    td
+                        a(href=`/api/faction/${faction.id}` onclick=`return confirm("Are you sure you want to delete ${factionName} ?")`) Delete
