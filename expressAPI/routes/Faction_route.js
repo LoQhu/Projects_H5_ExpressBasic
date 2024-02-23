@@ -47,14 +47,20 @@ router.post('/faction/create', async (req, res) => {
         );
         await newFaction.save()
         .then((faction) => {
-            res.status(201).json({msg: "New faction created"}).end();
+            // res.status(201).json({msg: "New faction created"});
+            // res.get('/api/factions');
         }).catch((error) => {
-            res.status(500).json({msg: "Failed to create new faction"});
-        });
+            if(error.name === 'ValidationError'){
+                res.status(400).json({msg: error.message});
+            }else{
+                res.status(500).json({msg: "Failed to create new faction"});
+            }
+        }); 
     } catch (error) {
         console.log(error);
         res.status(500).json({msg: "Failed to create new faction"});
     }
+    res.redirect(201,'/api/factions');
 });
 // URL to delete faction - http://localhost:3003/api/faction/:id
 router.delete("/faction/:id",async (req, res) => {
@@ -64,15 +70,32 @@ router.delete("/faction/:id",async (req, res) => {
             if(deleteResult.deletedCount == 0){
                 res.status(404).json({msg: "Faction not found"});
             }else{
-                res.status(200).json({msg: "Faction deleted"});
+                res.status(202).json({msg: "Faction deleted"});
             }
         }).catch((error) => {
             res.status(500).json({msg: "Failed to delete faction"});
-        }).end();
-        res.redirect('/factions');
+        });
     } catch (error) {
         console.log(error);
         res.status(500).json({msg: `Failed to delete faction : {error.message}`});
+    }
+});
+// URL to update faction - http://localhost:3003/api/faction/:id
+router.put("/faction/:id", async (req, res) => {
+    try {
+        await Faction.findByIdAndUpdate(req.params.id, req.body)
+        .then((updateResult) => {
+            if(updateResult == null){
+                res.status(404).json({msg: "Faction not found"});
+            }else{
+                res.status(202).json({msg: "Faction updated"});
+            }
+        }).catch((error) => {
+            res.status(500).json({msg: "Failed to update faction"});
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({msg: `Failed to update faction : {error.message}`});
     }
 });
 // router.get('/factions', async (req, res) => {
